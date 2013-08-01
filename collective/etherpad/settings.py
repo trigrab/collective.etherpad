@@ -17,7 +17,7 @@ class EtherpadSettings(interface.Interface):
 
     apikey = schema.TextLine(title=u"API KEY")
 
-    site_markup = schema.ASCIILine(
+    siteMarkupLanguage = schema.ASCIILine(
         title=u"Site Markup Language",
         default="text/html",
     )
