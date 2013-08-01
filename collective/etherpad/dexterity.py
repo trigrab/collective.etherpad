@@ -14,7 +14,10 @@ class EtherpadSyncForm(archetypes.EtherpadSyncForm):
         self.dexterity_fti = None
 
     def save(self):
-        #get the content from etherpad
+    #get siteMArkupLanguage
+    siteMarkupLanguage = self.settings.seitMarkupLanguage
+    #get the content from etherpad in the right format
+    if siteMarkupLanguage == "text/html":
         html = self.etherpad.getHTML(padID=self.padID)
         if html and 'html' in html:
             setattr(
@@ -22,7 +25,15 @@ class EtherpadSyncForm(archetypes.EtherpadSyncForm):
                 self.field.getName(),
                 self.field.fromUnicode(html['html'])
             )
-
+    else:
+        text = self.etherpad.getText(PadID=self.padID)
+        if text and 'text' in text:
+            setattr(
+                self.context,
+                self.field.getName(),
+                self.field.fromUnicode(html[siteMarkupLanguage])
+            )
+            
 
 class EtherpadEditView(archetypes.EtherpadEditView):
     """Implement etherpad for Archetypes content types"""

@@ -43,10 +43,17 @@ class EtherpadSyncForm(form.Form):
         self.save()
 
     def save(self):
-        #get the content from etherpad
-        html = self.etherpad.getHTML(padID=self.padID)
-        if html and 'html' in html:
-            self.field.set(self.context, html['html'], mimetype='text/html')
+        #get siteMArkupLanguage
+        siteMarkupLanguage = self.settings.seitMarkupLanguage
+        #get the content from etherpad in the right format
+        if siteMarkupLanguage == "text/html":
+            html = self.etherpad.getHTML(padID=self.padID)
+            if html and 'html' in html:
+                self.field.set(self.context, html['html'], mimetype='text/html')
+        else:
+            text = self.etherpad.getText(PadID=self.padID)
+            if text and 'text' in text:
+                self.field.set(self.context, text['text'], mimetype=siteMarkupLanguage)
 
 
 class EtherpadEditView(FormWrapper):
